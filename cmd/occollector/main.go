@@ -22,10 +22,17 @@ package main
 import (
 	"log"
 
+	"cloud.google.com/go/profiler"
 	"github.com/census-instrumentation/opencensus-service/cmd/occollector/app/collector"
 )
 
 func main() {
+	if err := profiler.Start(profiler.Config{
+		Service: "opencensus-collector",
+		ServiceVersion: "0.0.1",
+	}) ; err != nil {
+		log.Printf("Failed to initialize profiler: %v", err)
+	}
 	if err := collector.App.Start(); err != nil {
 		log.Fatalf("Failed to run the collector: %v", err)
 	}
